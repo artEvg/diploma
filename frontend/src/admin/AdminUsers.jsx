@@ -53,7 +53,7 @@ const AdminUsers = () => {
 											fontSize: "0.85rem",
 											fontWeight: "bold",
 										}}>
-										{u.role.toUpperCase()}
+										{u.role === "admin" ? "АДМИНИСТРАТОР" : "ПОЛЬЗОВАТЕЛЬ"}
 									</span>
 								</td>
 								<td style={tdStyle}>

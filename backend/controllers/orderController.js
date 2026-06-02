@@ -1,40 +1,44 @@
 const Order = require("../models/Order")
-const sendEmail = require("../utils/sendEmail")
+const Product = require("../models/Product")
 
 const addOrderItems = async (req, res) => {
 	try {
+		console.log("=== ДЕБАГ ADDORDERSITEMS ===")
+		console.log("req.user:", req.user)
+		console.log("req.body:", req.body)
+
 		const { items, totalAmount, address, paymentId } = req.body
+
 		if (items && items.length === 0) {
 			return res.status(400).json({ message: "Нет товаров в заказе" })
-		} else {
-			const order = new Order({
-				userId: req.user._id,
-				items,
-				totalAmount,
-				address,
-				paymentId,
-			})
-			const createdOrder = await order.save()
-
-			// Send Order Confirmation Email
-			const message = `
-        <h2>Информация о заказе</h2>
-        <p>Здравствуйте, ${req.user.name},</p>
-        <p>Ваш заказ успешно размещен на площадке! Номер заказа: <strong>${createdOrder._id}</strong></p>
-        <p>Итоговая стоимость: $${totalAmount.toFixed(2)}</p>
-        <p>Адрес Доставки: ${address.street}, ${address.city}</p>
-        <p>Спасибо что заказали товары на ТехноМир</p>
-      `
-
-			await sendEmail({
-				email: req.user.email,
-				subject: "ТехноМир - Информация о заказе",
-				message,
-			})
-
-			res.status(201).json(createdOrder)
 		}
+
+		// 1. Создаём заказ
+		const order = new Order({
+			userId: req.user.id || req.user._id,
+			items,
+			totalAmount,
+			address,
+			paymentId,
+		})
+
+		console.log("Создаю заказ с userId:", order.userId)
+
+		const createdOrder = await order.save()
+		console.log("Заказ сохранён:", createdOrder._id)
+
+		// 2. Уменьшаем остатки товаров
+		for (const item of items) {
+			await Product.updateOne(
+				{ _id: item.productId },
+				{ $inc: { stock: -item.qty } },
+			)
+		}
+
+		res.status(201).json(createdOrder)
 	} catch (error) {
+		console.error("ОШИБКА В ADDORDERSITEMS:", error)
+		console.error("Stack trace:", error.stack)
 		res.status(500).json({ message: error.message })
 	}
 }

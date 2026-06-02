@@ -97,7 +97,10 @@ const Profile = () => {
 						<strong>Почта:</strong> {user.email}
 					</p>
 					<span style={badgeStyle}>
-						Тип Аккаунта: {user.role.toUpperCase()}
+						Тип Аккаунта:{" "}
+						{user.role.toUpperCase() === "ADMIN"
+							? "АДМИНИСТРАТОР"
+							: "ПОЛЬЗОВАТЕЛЬ"}
 					</span>
 				</div>
 				<button
@@ -172,7 +175,7 @@ const Profile = () => {
 								<p style={{ color: "#a1a1aa", fontSize: "0.9rem" }}>
 									Итого:{" "}
 									<strong style={{ color: "#10b981" }}>
-										{order.totalAmount.toFixed(2)} ₽
+										{order.totalAmount.toFixed(3)} ₽
 									</strong>
 								</p>
 							</div>

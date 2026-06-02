@@ -68,14 +68,11 @@ const AdminDashboard = () => {
 					marginBottom: "5px",
 				}}>
 				<img
-					src='/ShopNestLogo.png'
+					src='/logo.png'
 					alt='Logo'
 					style={{
-						height: "40px",
-						width: "40px",
-						borderRadius: "8px",
-						objectFit: "cover",
-						filter: "drop-shadow(0 0px 10px rgba(249, 115, 22, 0.3))",
+						height: "80px",
+						width: "100px",
 					}}
 				/>
 				<h2 style={{ margin: 0 }}>Панель Администратора</h2>
@@ -113,7 +110,7 @@ const AdminDashboard = () => {
 						<h4 style={{ color: "#a1a1aa", fontSize: "1rem" }}>
 							Выручка за все время
 						</h4>
-						<div style={numberStyle}>{stats.totalRevenue.toFixed(2)} ₽</div>
+						<div style={numberStyle}>{stats.totalRevenue.toFixed(3)} ₽</div>
 					</div>
 				</div>
 			) : (

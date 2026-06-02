@@ -54,8 +54,10 @@ const AdminOrders = () => {
 								key={order._id}
 								style={rowStyle}>
 								<td style={tdStyle}>{order._id.substring(0, 8)}...</td>
-								<td style={tdStyle}>{order.userId?.name || "Deleted User"}</td>
-								<td style={tdStyle}>₹{order.totalAmount.toFixed(2)}</td>
+								<td style={tdStyle}>
+									{order.userId?.name || "Пользователь Удален"}
+								</td>
+								<td style={tdStyle}>{order.totalAmount.toFixed(3)} ₽</td>
 								<td style={tdStyle}>
 									{new Date(order.createdAt).toLocaleDateString()}
 								</td>

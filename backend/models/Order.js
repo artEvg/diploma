@@ -30,7 +30,7 @@ const orderSchema = new mongoose.Schema(
 		status: {
 			type: String,
 			enum: ["В ожидании", "Отправлено", "Доставлено"],
-			default: "Pending",
+			default: "В ожидании",
 		},
 	},
 	{ timestamps: true },

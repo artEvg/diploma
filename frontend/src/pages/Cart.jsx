@@ -45,7 +45,7 @@ const Cart = () => {
 								/>
 								<div className='cart-item-details'>
 									<h4>{item.name}</h4>
-									<p>₹{item.price}</p>
+									<p>{item.price.toFixed(3)} ₽</p>
 									<div className='qty-controls'>
 										<button onClick={() => handleUpdateQty(item, item.qty - 1)}>
 											-
@@ -65,7 +65,7 @@ const Cart = () => {
 						))}
 					</div>
 					<div className='cart-summary'>
-						<h3>Всего: {totalPrice.toFixed(2)} ₽</h3>
+						<h3>Всего: {totalPrice.toFixed(3)} ₽</h3>
 						<button
 							onClick={() => navigate("/checkout")}
 							className='btn btn-checkout'>

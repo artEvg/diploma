@@ -23,7 +23,7 @@ const AddProduct = () => {
 
 	const handleSubmit = async e => {
 		e.preventDefault()
-		if (!image) return alert("Please select an image")
+		if (!image) return alert("Пожалуйста добавьте изображение товара")
 
 		setLoading(true)
 		const data = new FormData()

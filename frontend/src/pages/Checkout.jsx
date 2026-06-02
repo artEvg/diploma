@@ -23,109 +23,44 @@ const Checkout = () => {
 		0,
 	)
 
-	const handlePayment = async () => {
-		try {
-			const orderRes = await fetch("/api/payment/order", {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ amount: totalPrice }),
-			})
-			const orderData = await orderRes.json()
-
-			if (!orderRes.ok) {
-				const fallback = window.confirm(
-					"Оплата не настроена. Совершить тестовый заказ",
-				)
-				if (fallback) {
-					return bypassPayment()
-				} else {
-					return alert("Ошибка инициализации")
-				}
-			}
-
-			const options = {
-				key: "rzp_test_dummykey123",
-				amount: orderData.amount,
-				currency: orderData.currency,
-				name: "ShopNest",
-				description: "Тестовый Платеж",
-				order_id: orderData.id,
-				handler: async function (response) {
-					const verifyRes = await fetch("/api/payment/verify", {
-						method: "POST",
-						headers: { "Content-Type": "application/json" },
-						body: JSON.stringify(response),
-					})
-					if (verifyRes.ok) {
-						const saveOrderRes = await fetch("/api/orders", {
-							method: "POST",
-							headers: {
-								"Content-Type": "application/json",
-								Authorization: `Bearer ${user.token}`,
-							},
-							body: JSON.stringify({
-								items: cartItems,
-								totalAmount: totalPrice,
-								address,
-								paymentId: response.razorpay_payment_id,
-							}),
-						})
-
-						if (saveOrderRes.ok) {
-							dispatch(clearCart())
-							navigate("/ordersuccess")
-						} else {
-							alert("Ошибка оформления заказа")
-						}
-					} else {
-						alert("Ошибка оплаты")
-					}
-				},
-				prefill: {
-					name: address.fullName,
-					email: user?.email,
-					contact: "9999999999",
-				},
-				theme: {
-					color: "#f97316",
-				},
-			}
-
-			const rzp1 = new window.Razorpay(options)
-			rzp1.open()
-		} catch (error) {
-			console.error(error)
-		}
-	}
-
-	const bypassPayment = async () => {
-		const saveOrderRes = await fetch("/api/orders", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${user.token}`,
-			},
-			body: JSON.stringify({
-				items: cartItems,
-				totalAmount: totalPrice,
-				address,
-				paymentId: "bypass_txn_" + Date.now(),
-			}),
-		})
-		if (saveOrderRes.ok) {
-			dispatch(clearCart())
-			navigate("/ordersuccess")
-		}
-	}
-
-	const handleSubmit = e => {
+	const handleSubmit = async e => {
 		e.preventDefault()
+
 		if (!user) {
 			alert("Пожалуйста, сначала войдите")
 			navigate("/login")
 			return
 		}
-		handlePayment()
+
+		try {
+			alert("Начинается процесс оплаты...")
+
+			const response = await fetch("/api/orders", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${user.token}`,
+				},
+				body: JSON.stringify({
+					items: cartItems,
+					totalAmount: totalPrice,
+					address,
+					paymentId: "txn_" + Date.now(),
+				}),
+			})
+
+			const data = await response.json()
+
+			if (response.ok) {
+				dispatch(clearCart())
+				navigate("/order-success")
+			} else {
+				alert(data.message || "Ошибка оформления заказа")
+			}
+		} catch (error) {
+			console.error(error)
+			alert("Ошибка оформления заказа")
+		}
 	}
 
 	return (
@@ -174,7 +109,7 @@ const Checkout = () => {
 						onChange={e => setAddress({ ...address, country: e.target.value })}
 					/>
 					<div className='checkout-summary'>
-						<h4>Итого: {totalPrice.toFixed(2)} ₽</h4>
+						<h4>Итого: {totalPrice.toFixed(3)} ₽</h4>
 						<button
 							type='submit'
 							className='btn'>
