@@ -9,7 +9,6 @@ connectDB()
 
 const app = express()
 
-// Set CORS for frontend URL / allow single-node deploy
 app.use(
 	cors({
 		origin: [
