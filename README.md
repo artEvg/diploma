@@ -1,6 +1,6 @@
 <div align="center">
   <img src="https://cdn-icons-png.flaticon.com/512/3514/3514491.png" alt="ShopNest Logo" width="80" />
-  <h1>ShopNest - Full-Stack MERN E-Commerce App</h1>
+  <h1>ТехноМир - Full-Stack MERN E-Commerce App</h1>
   <p>A professionally engineered, full-stack E-commerce platform built strictly using modern standard React (CRA) on the frontend and Express/MongoDB on the backend.</p>
 </div>
 
@@ -12,7 +12,6 @@
 - **Backend:** Node.js, Express.js architecture mapped with middleware-based routing.
 - **Database:** MongoDB (via Mongoose schemas).
 - **Features:** Unified Admin Dashboard, Direct Cloudinary Content Maps, Personal User Profiles matching mapped Order Histories.
-- **Payments:** Razorpay fully implemented (utilize your test metrics or placeholder).
 - **Cloud Storage:** Cloudinary integration for Product image uploading securely via Multer.
 
 ---
@@ -34,7 +33,7 @@ RAZORPAY_KEY_ID=your_key_id
 RAZORPAY_KEY_SECRET=your_key_secret
 ```
 
-From the **root folder** `shopnest/`, trigger a full install across environments:
+From the **root folder** `diploma/`, trigger a full install across environments:
 ```bash
 npm run build
 ```
@@ -53,24 +52,3 @@ npm run dev
 ```
 
 ---
-
-## ☁️ 1-Click Deployment (Render Free-Tier Optimized)
-
-The server codebase features a seamless fallback mechanic leveraging Node `process.env.NODE_ENV === "production"`. When deployed to Render as a singular instance, the Express backend hosts and correctly resolves static routes to `/frontend/build` rendering the whole platform completely free on 1 Node server.
-
-1. Publish this repo onto **GitHub**.
-2. Go to [Render Dashboard](https://dashboard.render.com).
-3. Connect Repo -> Create a **Web Service**.
-4. Configure Build Command:
-   `npm run render-build` 
-   *(This cleanly installs API + UI node_modules then generates `react-scripts build`)*
-5. Configure Start Command:
-   `npm start`
-6. Open **Advanced > Environment Variables** and map your `.env` fields heavily defining `NODE_ENV = production`.
-7. Hit **Deploy**. The robust path resolving inside `/backend/server.js` hosts it fluidly!
-
----
-
-## 📄 Postman Documentations
-This repository includes a fully-scaffolded API testing toolkit: **`ShopNest_Postman_Collection.json`**. 
-Simply Import this file directly into the local Postman IDE. It features variables like `{{token}}` properly mapped to effortlessly check protected admin/user/order payloads. Happy coding!
