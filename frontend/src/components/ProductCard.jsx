@@ -5,11 +5,14 @@ import "../styles/product.css"
 const ProductCard = ({ product }) => {
 	return (
 		<div className='product-card'>
-			<img
-				src={product.imageUrl}
-				alt={product.name}
-				className='product-image'
-			/>
+			<div className='product-image-wrapper'>
+				<img
+					src={product.imageUrl}
+					alt={product.name}
+					className='product-image'
+				/>
+			</div>
+
 			<div className='product-info'>
 				<h3>{product.name}</h3>
 				<p className='price'>{product.price.toFixed(3)} ₽</p>

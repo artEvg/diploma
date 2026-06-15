@@ -13,7 +13,8 @@ const AddProduct = () => {
 		category: "",
 		stock: "",
 	})
-	const [image, setImage] = useState(null)
+	const [mainImage, setMainImage] = useState(null)
+	const [additionalImages, setAdditionalImages] = useState([])
 	const [loading, setLoading] = useState(false)
 
 	if (!user || user.role !== "admin") {
@@ -23,7 +24,8 @@ const AddProduct = () => {
 
 	const handleSubmit = async e => {
 		e.preventDefault()
-		if (!image) return alert("Пожалуйста добавьте изображение товара")
+		if (!mainImage)
+			return alert("Пожалуйста добавьте основное изображение товара")
 
 		setLoading(true)
 		const data = new FormData()
@@ -32,7 +34,11 @@ const AddProduct = () => {
 		data.append("price", formData.price)
 		data.append("category", formData.category)
 		data.append("stock", formData.stock)
-		data.append("image", image)
+		data.append("mainImage", mainImage)
+
+		additionalImages.forEach(file => {
+			data.append("additionalImages", file)
+		})
 
 		try {
 			const res = await fetch("/api/products", {
@@ -40,13 +46,14 @@ const AddProduct = () => {
 				headers: { Authorization: `Bearer ${user.token}` },
 				body: data,
 			})
+
 			const responseData = await res.json()
 
 			if (res.ok) {
 				alert("Товар успешно добавлен")
 				navigate("/shop")
 			} else {
-				alert(responseData.message || "Ошибка при создание товара")
+				alert(responseData.message || "Ошибка при создании товара")
 			}
 		} catch (error) {
 			console.error(error)
@@ -56,21 +63,14 @@ const AddProduct = () => {
 	}
 
 	return (
-		<div
-			style={{
-				maxWidth: "600px",
-				margin: "40px auto",
-				background: "#18181b",
-				padding: "40px",
-				borderRadius: "12px",
-				border: "1px solid rgba(255,255,255,0.05)",
-			}}>
+		<div style={wrapStyle}>
 			<h2 style={{ color: "#f97316", marginBottom: "20px" }}>
 				Добавить Новый Товар
 			</h2>
+
 			<form
 				onSubmit={handleSubmit}
-				style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
+				style={formStyle}>
 				<input
 					type='text'
 					placeholder='Название товара'
@@ -109,25 +109,24 @@ const AddProduct = () => {
 					style={inputStyle}
 				/>
 
-				<div
-					style={{
-						padding: "15px",
-						border: "1px dashed #f97316",
-						borderRadius: "8px",
-					}}>
-					<label
-						style={{
-							display: "block",
-							marginBottom: "10px",
-							color: "#a1a1aa",
-						}}>
-						Загрузите изображение товара
-					</label>
+				<div style={fileBoxStyle}>
+					<label style={labelStyle}>Основное изображение</label>
 					<input
 						type='file'
 						accept='image/*'
 						required
-						onChange={e => setImage(e.target.files[0])}
+						onChange={e => setMainImage(e.target.files[0])}
+						style={{ color: "#fff" }}
+					/>
+				</div>
+
+				<div style={fileBoxStyle}>
+					<label style={labelStyle}>Дополнительные изображения</label>
+					<input
+						type='file'
+						accept='image/*'
+						multiple
+						onChange={e => setAdditionalImages(Array.from(e.target.files))}
 						style={{ color: "#fff" }}
 					/>
 				</div>
@@ -144,6 +143,21 @@ const AddProduct = () => {
 	)
 }
 
+const wrapStyle = {
+	maxWidth: "600px",
+	margin: "40px auto",
+	background: "#18181b",
+	padding: "40px",
+	borderRadius: "12px",
+	border: "1px solid rgba(255,255,255,0.05)",
+}
+
+const formStyle = {
+	display: "flex",
+	flexDirection: "column",
+	gap: "15px",
+}
+
 const inputStyle = {
 	padding: "12px",
 	background: "#09090b",
@@ -152,6 +166,18 @@ const inputStyle = {
 	color: "#fff",
 	fontSize: "15px",
 	outline: "none",
+}
+
+const fileBoxStyle = {
+	padding: "15px",
+	border: "1px dashed #f97316",
+	borderRadius: "8px",
+}
+
+const labelStyle = {
+	display: "block",
+	marginBottom: "10px",
+	color: "#a1a1aa",
 }
 
 export default AddProduct

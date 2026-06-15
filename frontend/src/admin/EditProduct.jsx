@@ -14,44 +14,59 @@ const EditProduct = () => {
 		category: "",
 		stock: "",
 	})
-	const [image, setImage] = useState(null)
+	const [mainImage, setMainImage] = useState(null)
+	const [additionalImages, setAdditionalImages] = useState([])
 	const [loading, setLoading] = useState(false)
+	const [product, setProduct] = useState(null)
 
 	useEffect(() => {
 		const fetchProduct = async () => {
 			const res = await fetch(`/api/products/${id}`)
 			const data = await res.json()
+
+			setProduct(data)
 			setFormData({
-				name: data.name,
-				description: data.description,
-				price: data.price,
-				category: data.category,
-				stock: data.stock,
+				name: data.name || "",
+				description: data.description || "",
+				price: data.price || "",
+				category: data.category || "",
+				stock: data.stock || "",
 			})
 		}
+
 		fetchProduct()
 	}, [id])
 
 	const handleSubmit = async e => {
 		e.preventDefault()
 		setLoading(true)
+
 		const data = new FormData()
 		data.append("name", formData.name)
 		data.append("description", formData.description)
 		data.append("price", formData.price)
 		data.append("category", formData.category)
 		data.append("stock", formData.stock)
-		if (image) data.append("image", image)
+
+		if (mainImage) data.append("mainImage", mainImage)
+		additionalImages.forEach(file => {
+			data.append("additionalImages", file)
+		})
 
 		const res = await fetch(`/api/products/${id}`, {
 			method: "PUT",
 			headers: { Authorization: `Bearer ${user.token}` },
 			body: data,
 		})
+
 		setLoading(false)
+
 		if (res.ok) {
 			alert("Товар успешно обновлен!")
 			navigate("/admin/products")
+		} else {
+			const errorData = await res.json()
+			alert(errorData.message || "Ошибка при обновлении товара")
 		}
 	}
 
@@ -66,6 +81,7 @@ const EditProduct = () => {
 				border: "1px solid rgba(255,255,255,0.05)",
 			}}>
 			<h2 style={{ color: "#f97316", marginBottom: "20px" }}>Изменить Товар</h2>
+
 			<form
 				onSubmit={handleSubmit}
 				style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
@@ -77,6 +93,7 @@ const EditProduct = () => {
 					onChange={e => setFormData({ ...formData, name: e.target.value })}
 					style={inputStyle}
 				/>
+
 				<textarea
 					placeholder='Описание'
 					required
@@ -87,6 +104,7 @@ const EditProduct = () => {
 					}
 					style={inputStyle}
 				/>
+
 				<input
 					type='number'
 					placeholder='Цена'
@@ -95,6 +113,7 @@ const EditProduct = () => {
 					onChange={e => setFormData({ ...formData, price: e.target.value })}
 					style={inputStyle}
 				/>
+
 				<input
 					type='text'
 					placeholder='Категория'
@@ -103,6 +122,7 @@ const EditProduct = () => {
 					onChange={e => setFormData({ ...formData, category: e.target.value })}
 					style={inputStyle}
 				/>
+
 				<input
 					type='number'
 					placeholder='Остаток'
@@ -111,27 +131,28 @@ const EditProduct = () => {
 					onChange={e => setFormData({ ...formData, stock: e.target.value })}
 					style={inputStyle}
 				/>
-				<div
-					style={{
-						padding: "15px",
-						border: "1px dashed #f97316",
-						borderRadius: "8px",
-					}}>
-					<label
-						style={{
-							display: "block",
-							marginBottom: "10px",
-							color: "#a1a1aa",
-						}}>
-						Обновить изображение
-					</label>
+
+				<div style={fileBoxStyle}>
+					<label style={labelStyle}>Обновить основное изображение</label>
 					<input
 						type='file'
 						accept='image/*'
-						onChange={e => setImage(e.target.files[0])}
+						onChange={e => setMainImage(e.target.files[0])}
 						style={{ color: "#fff" }}
 					/>
 				</div>
+
+				<div style={fileBoxStyle}>
+					<label style={labelStyle}>Добавить дополнительные изображения</label>
+					<input
+						type='file'
+						accept='image/*'
+						multiple
+						onChange={e => setAdditionalImages(Array.from(e.target.files))}
+						style={{ color: "#fff" }}
+					/>
+				</div>
+
 				<button
 					type='submit'
 					disabled={loading}
@@ -153,4 +174,17 @@ const inputStyle = {
 	fontSize: "15px",
 	outline: "none",
 }
+
+const fileBoxStyle = {
+	padding: "15px",
+	border: "1px dashed #f97316",
+	borderRadius: "8px",
+}
+
+const labelStyle = {
+	display: "block",
+	marginBottom: "10px",
+	color: "#a1a1aa",
+}
+
 export default EditProduct

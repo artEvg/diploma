@@ -75,10 +75,10 @@ const AdminDashboard = () => {
 						width: "100px",
 					}}
 				/>
-				<h2 style={{ margin: 0 }}>Панель Администратора</h2>
+				<h2 style={{ margin: 0 }}>Панель администратора</h2>
 			</div>
 			<p style={{ color: "#a1a1aa", marginBottom: "30px", fontSize: "1.1rem" }}>
-				Добро Пожаловать, <span style={{ color: "#fff" }}>{user?.name}</span>
+				Добро пожаловать, <span style={{ color: "#fff" }}>{user?.name}</span>
 			</p>
 
 			{stats ? (
@@ -102,7 +102,7 @@ const AdminDashboard = () => {
 					</div>
 					<div style={cardStyle}>
 						<h4 style={{ color: "#a1a1aa", fontSize: "1rem" }}>
-							Всего Пользователей
+							Всего пользователей
 						</h4>
 						<div style={numberStyle}>{stats.totalUsers}</div>
 					</div>

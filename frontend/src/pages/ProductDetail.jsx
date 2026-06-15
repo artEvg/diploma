@@ -5,34 +5,43 @@ import { addToCart } from "../redux/cartSlice"
 import "../styles/product.css"
 
 const ProductDetail = () => {
-	const { id } = useParams()
+  const { id } = useParams()
 	const [product, setProduct] = useState(null)
 	const [loading, setLoading] = useState(true)
-	const dispatch = useDispatch()
+  const [selectedImage, setSelectedImage] = useState("")
+  const dispatch = useDispatch()
 
-	useEffect(() => {
+  useEffect(() => {
 		const fetchProduct = async () => {
 			try {
 				const res = await fetch(`/api/products/${id}`)
 				const data = await res.json()
 				setProduct(data)
+
+				const images = [
+					data.mainImageUrl,
+					...(data.additionalImageUrls || []),
+				].filter(Boolean)
+
+				setSelectedImage(images[0] || "")
 			} catch (error) {
 				console.error(error)
 			} finally {
 				setLoading(false)
 			}
 		}
+
 		fetchProduct()
 	}, [id])
 
-	const handleAddToCart = () => {
+  const handleAddToCart = () => {
 		if (product) {
 			dispatch(
 				addToCart({
 					productId: product._id,
 					name: product.name,
 					price: product.price,
-					imageUrl: product.imageUrl,
+					imageUrl: product.mainImageUrl,
 					qty: 1,
 				}),
 			)
@@ -40,24 +49,29 @@ const ProductDetail = () => {
 		}
 	}
 
-	if (loading)
+  if (loading)
 		return (
 			<div style={{ textAlign: "center", margin: "100px", color: "#f97316" }}>
 				Загрузка Товара...
 			</div>
 		)
-	if (!product)
+
+  if (!product)
 		return (
 			<div style={{ textAlign: "center", margin: "100px", color: "#ef4444" }}>
 				Товар не найден
 			</div>
 		)
 
-	return (
+  const images = [
+		product.mainImageUrl,
+		...(product.additionalImageUrls || []),
+	].filter(Boolean)
+
+  return (
 		<div
 			className='product-detail-wrapper'
 			style={{ maxWidth: "1200px", margin: "0 auto", padding: "20px" }}>
-			{/* Breadcrumb Navigation */}
 			<div
 				style={{ color: "#a1a1aa", marginBottom: "20px", fontSize: "0.95rem" }}>
 				<Link
@@ -76,16 +90,33 @@ const ProductDetail = () => {
 			</div>
 
 			<div className='product-detail'>
-				{/* Left Side: Image */}
 				<div className='detail-image-container'>
-					<img
-						src={product.imageUrl}
-						alt={product.name}
-						className='detail-image'
-					/>
+					<div className='detail-main-image'>
+						<img
+							src={selectedImage || product.mainImageUrl}
+							alt={product.name}
+						/>
+					</div>
+
+					{images.length > 1 && (
+						<div className='detail-thumbnails'>
+							{images.map((img, index) => (
+								<button
+									key={index}
+									type='button'
+									className={`thumb-btn ${selectedImage === img ? "active" : ""}`}
+									onClick={() => setSelectedImage(img)}>
+									<img
+										src={img}
+										alt={`${product.name} ${index + 1}`}
+										className='thumb-image'
+									/>
+								</button>
+							))}
+						</div>
+					)}
 				</div>
 
-				{/* Right Side: Information Block */}
 				<div className='detail-info'>
 					<h2 style={{ fontSize: "2.8rem", marginBottom: "10px" }}>
 						{product.name}
@@ -97,7 +128,6 @@ const ProductDetail = () => {
 						{product.price.toFixed(3)} ₽
 					</p>
 
-					{/* Description */}
 					<div style={{ marginBottom: "25px" }}>
 						<h4 style={{ color: "#fff", marginBottom: "10px" }}>Описание</h4>
 						<p style={{ color: "#a1a1aa", lineHeight: "1.8" }}>
@@ -105,7 +135,6 @@ const ProductDetail = () => {
 						</p>
 					</div>
 
-					{/* Cart & Stock Actions */}
 					<div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
 						<button
 							onClick={handleAddToCart}

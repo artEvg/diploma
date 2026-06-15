@@ -67,16 +67,19 @@ const AdminProducts = () => {
 								<td style={tdStyle}>{product.category}</td>
 								<td style={tdStyle}>{product.stock}</td>
 								<td style={tdStyle}>
-									<Link
-										to={`/admin/edit-product/${product._id}`}
-										style={editBtn}>
-										Изменить
-									</Link>
-									<button
-										onClick={() => handleDelete(product._id)}
-										style={deleteBtn}>
-										Удалить
-									</button>
+									<div style={actionsStyle}>
+										<Link
+											to={`/admin/edit-product/${product._id}`}
+											style={editBtn}>
+											Изменить
+										</Link>
+
+										<button
+											onClick={() => handleDelete(product._id)}
+											style={deleteBtn}>
+											Удалить
+										</button>
+									</div>
 								</td>
 							</tr>
 						))}
@@ -105,13 +108,22 @@ const thStyle = {
 	fontSize: "0.9rem",
 }
 const tdStyle = { padding: "15px", textAlign: "left" }
+const actionsStyle = {
+	display: "flex",
+	gap: "10px",
+	alignItems: "center",
+	flexWrap: "wrap",
+}
+
 const editBtn = {
-	background: "#3b82f6",
-	color: "#fff",
+	background: "#ffffff",
+	color: "#000000",
 	padding: "6px 12px",
 	borderRadius: "4px",
-	marginRight: "10px",
+	textDecoration: "none",
+	display: "inline-block",
 }
+
 const deleteBtn = {
 	background: "#ef4444",
 	color: "#fff",
@@ -119,6 +131,7 @@ const deleteBtn = {
 	borderRadius: "4px",
 	border: "none",
 	cursor: "pointer",
+	display: "inline-block",
 }
 
 export default AdminProducts
