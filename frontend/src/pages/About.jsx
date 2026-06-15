@@ -41,9 +41,11 @@ const About = () => {
 					boxShadow: "0 4px 20px rgba(249, 115, 22, 0.4)",
 				}}
 			/>
+
 			<h2 style={{ fontSize: "2.5rem", marginBottom: "10px", color: "#fff" }}>
 				О нас
 			</h2>
+
 			<h3
 				style={{ fontSize: "1.5rem", color: "#f97316", marginBottom: "15px" }}>
 				Артём Евгеньевич (@artem_evg)
@@ -90,6 +92,7 @@ const About = () => {
 					/>
 					Max
 				</a>
+
 				<a
 					href='https://github.com/artEvg'
 					target='_blank'
@@ -109,8 +112,33 @@ const About = () => {
 						alt='GitHub'
 						width={25}
 						height={25}
-					/>{" "}
+					/>
 					GitHub
+				</a>
+			</div>
+
+			<div style={{ marginTop: "30px" }}>
+				<p style={{ color: "#a1a1aa", marginBottom: "12px", fontSize: "1rem" }}>
+					Отсканируй QR-код для перехода в GitHub
+				</p>
+
+				<a
+					href='https://github.com/artEvg/diploma'
+					target='_blank'
+					rel='noreferrer'
+					style={{ display: "inline-block" }}>
+					<img
+						src='/qrcode_github.com.png'
+						alt='QR code to GitHub'
+						style={{
+							width: "180px",
+							height: "180px",
+							borderRadius: "12px",
+							border: "4px solid rgba(255,255,255,0.08)",
+							background: "#fff",
+							padding: "8px",
+						}}
+					/>
 				</a>
 			</div>
 		</div>
