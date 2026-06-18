@@ -7,7 +7,7 @@ const Profile = () => {
 	const navigate = useNavigate()
 	const [orders, setOrders] = useState([])
 	const [loading, setLoading] = useState(true)
-	const API_URL = process.env.VITE_REACT_APP_BACKEND_BASEURL
+	const API_URL = process.env.REACT_APP_BACKEND_BASEURL
 
 	useEffect(() => {
 		if (!user) {

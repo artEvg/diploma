@@ -5,7 +5,7 @@ import { Link } from "react-router-dom"
 const AdminProducts = () => {
 	const { user } = useContext(AuthContext)
 	const [products, setProducts] = useState([])
-	const API_URL = process.env.VITE_REACT_APP_BACKEND_BASEURL
+	const API_URL = process.env.REACT_APP_BACKEND_BASEURL
 
 	useEffect(() => {
 		const fetchProducts = async () => {

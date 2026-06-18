@@ -10,7 +10,7 @@ const ProductDetail = () => {
 	const [loading, setLoading] = useState(true)
   const [selectedImage, setSelectedImage] = useState("")
   const dispatch = useDispatch()
-	const API_URL = process.env.VITE_REACT_APP_BACKEND_BASEURL
+	const API_URL = process.env.REACT_APP_BACKEND_BASEURL
 
   useEffect(() => {
 		const fetchProduct = async () => {

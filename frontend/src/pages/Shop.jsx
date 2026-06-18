@@ -6,7 +6,7 @@ const Shop = () => {
 	const [products, setProducts] = useState([])
 	const [loading, setLoading] = useState(true)
 	const [search, setSearch] = useState("")
-	const API_URL = process.env.VITE_REACT_APP_BACKEND_BASEURL
+	const API_URL = process.env.REACT_APP_BACKEND_BASEURL
 
 	useEffect(() => {
 		const fetchProducts = async () => {

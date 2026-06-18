@@ -6,7 +6,7 @@ const EditProduct = () => {
 	const { id } = useParams()
 	const { user } = useContext(AuthContext)
 	const navigate = useNavigate()
-	const API_URL = process.env.VITE_REACT_APP_BACKEND_BASEURL
+	const API_URL = process.env.REACT_APP_BACKEND_BASEURL
 
 	const [formData, setFormData] = useState({
 		name: "",

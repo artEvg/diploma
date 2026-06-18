@@ -9,7 +9,7 @@ const Register = () => {
 	const [password, setPassword] = useState("")
 	const { login } = useContext(AuthContext)
 	const navigate = useNavigate()
-	const API_URL = process.env.VITE_REACT_APP_BACKEND_BASEURL
+	const API_URL = process.env.REACT_APP_BACKEND_BASEURL
 
 	const handleSubmit = async e => {
 		e.preventDefault()

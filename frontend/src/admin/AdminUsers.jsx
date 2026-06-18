@@ -4,7 +4,7 @@ import { AuthContext } from "../context/AuthContext"
 const AdminUsers = () => {
 	const { user } = useContext(AuthContext)
 	const [users, setUsers] = useState([])
-	const API_URL = process.env.VITE_REACT_APP_BACKEND_BASEURL
+	const API_URL = process.env.REACT_APP_BACKEND_BASEURL
 
 	useEffect(() => {
 		const fetchUsers = async () => {

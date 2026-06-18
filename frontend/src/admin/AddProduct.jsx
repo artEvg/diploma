@@ -16,7 +16,7 @@ const AddProduct = () => {
 	const [mainImage, setMainImage] = useState(null)
 	const [additionalImages, setAdditionalImages] = useState([])
 	const [loading, setLoading] = useState(false)
-	const API_URL = process.env.VITE_REACT_APP_BACKEND_BASEURL
+	const API_URL = process.env.REACT_APP_BACKEND_BASEURL
 
 	if (!user || user.role !== "admin") {
 		navigate("/")

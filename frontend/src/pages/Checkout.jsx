@@ -9,7 +9,7 @@ const Checkout = () => {
 	const cartItems = useSelector(state => state.cart.cartItems)
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
-	const API_URL = process.env.VITE_REACT_APP_BACKEND_BASEURL
+	const API_URL = process.env.REACT_APP_BACKEND_BASEURL
 
 	const [address, setAddress] = useState({
 		fullName: "",
