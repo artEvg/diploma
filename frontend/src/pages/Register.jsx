@@ -9,11 +9,12 @@ const Register = () => {
 	const [password, setPassword] = useState("")
 	const { login } = useContext(AuthContext)
 	const navigate = useNavigate()
+	const API_URL = process.env.VITE_REACT_APP_BACKEND_BASEURL
 
 	const handleSubmit = async e => {
 		e.preventDefault()
 		try {
-			const res = await fetch("/api/auth/register", {
+			const res = await fetch(`${API_URL}/api/auth/register`, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ name, email, password }),

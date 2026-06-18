@@ -6,6 +6,7 @@ const AdminDashboard = () => {
 	const { user } = useContext(AuthContext)
 	const navigate = useNavigate()
 	const [stats, setStats] = useState(null)
+	const API_URL = process.env.VITE_REACT_APP_BACKEND_BASEURL
 
 	useEffect(() => {
 		if (!user || user.role !== "admin") {
@@ -15,7 +16,7 @@ const AdminDashboard = () => {
 
 		const fetchStats = async () => {
 			try {
-				const res = await fetch("/api/analytics", {
+				const res = await fetch(`${API_URL}/api/analytics`, {
 					headers: { Authorization: `Bearer ${user.token}` },
 				})
 				const data = await res.json()

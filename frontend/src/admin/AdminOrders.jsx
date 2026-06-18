@@ -4,10 +4,11 @@ import { AuthContext } from "../context/AuthContext"
 const AdminOrders = () => {
 	const { user } = useContext(AuthContext)
 	const [orders, setOrders] = useState([])
+	const API_URL = process.env.VITE_REACT_APP_BACKEND_BASEURL
 
 	useEffect(() => {
 		const fetchOrders = async () => {
-			const res = await fetch("/api/orders", {
+			const res = await fetch(`${API_URL}/api/orders`, {
 				headers: { Authorization: `Bearer ${user.token}` },
 			})
 			const data = await res.json()
@@ -17,7 +18,7 @@ const AdminOrders = () => {
 	}, [user])
 
 	const updateStatus = async (id, status) => {
-		const res = await fetch(`/api/orders/${id}/status`, {
+		const res = await fetch(`${API_URL}/api/orders/${id}/status`, {
 			method: "PUT",
 			headers: {
 				"Content-Type": "application/json",

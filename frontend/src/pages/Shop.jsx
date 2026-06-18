@@ -6,11 +6,12 @@ const Shop = () => {
 	const [products, setProducts] = useState([])
 	const [loading, setLoading] = useState(true)
 	const [search, setSearch] = useState("")
+	const API_URL = process.env.VITE_REACT_APP_BACKEND_BASEURL
 
 	useEffect(() => {
 		const fetchProducts = async () => {
 			try {
-				const res = await fetch("/api/products")
+				const res = await fetch(`${API_URL}/api/products`)
 				const data = await res.json()
 				setProducts(data)
 			} catch (error) {

@@ -6,6 +6,7 @@ const EditProduct = () => {
 	const { id } = useParams()
 	const { user } = useContext(AuthContext)
 	const navigate = useNavigate()
+	const API_URL = process.env.VITE_REACT_APP_BACKEND_BASEURL
 
 	const [formData, setFormData] = useState({
 		name: "",
@@ -21,7 +22,7 @@ const EditProduct = () => {
 
 	useEffect(() => {
 		const fetchProduct = async () => {
-			const res = await fetch(`/api/products/${id}`)
+			const res = await fetch(`${API_URL}/api/products/${id}`)
 			const data = await res.json()
 
 			setProduct(data)
@@ -53,7 +54,7 @@ const EditProduct = () => {
 			data.append("additionalImages", file)
 		})
 
-		const res = await fetch(`/api/products/${id}`, {
+		const res = await fetch(`${API_URL}/api/products/${id}`, {
 			method: "PUT",
 			headers: { Authorization: `Bearer ${user.token}` },
 			body: data,

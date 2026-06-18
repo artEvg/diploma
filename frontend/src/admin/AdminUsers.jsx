@@ -4,10 +4,11 @@ import { AuthContext } from "../context/AuthContext"
 const AdminUsers = () => {
 	const { user } = useContext(AuthContext)
 	const [users, setUsers] = useState([])
+	const API_URL = process.env.VITE_REACT_APP_BACKEND_BASEURL
 
 	useEffect(() => {
 		const fetchUsers = async () => {
-			const res = await fetch("/api/auth/users", {
+			const res = await fetch(`${API_URL}/api/auth/users`, {
 				headers: { Authorization: `Bearer ${user.token}` },
 			})
 			const data = await res.json()

@@ -16,6 +16,7 @@ const AddProduct = () => {
 	const [mainImage, setMainImage] = useState(null)
 	const [additionalImages, setAdditionalImages] = useState([])
 	const [loading, setLoading] = useState(false)
+	const API_URL = process.env.VITE_REACT_APP_BACKEND_BASEURL
 
 	if (!user || user.role !== "admin") {
 		navigate("/")
@@ -41,7 +42,7 @@ const AddProduct = () => {
 		})
 
 		try {
-			const res = await fetch("/api/products", {
+			const res = await fetch(`${API_URL}/api/products`, {
 				method: "POST",
 				headers: { Authorization: `Bearer ${user.token}` },
 				body: data,

@@ -9,6 +9,7 @@ const Checkout = () => {
 	const cartItems = useSelector(state => state.cart.cartItems)
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
+	const API_URL = process.env.VITE_REACT_APP_BACKEND_BASEURL
 
 	const [address, setAddress] = useState({
 		fullName: "",
@@ -35,7 +36,7 @@ const Checkout = () => {
 		try {
 			alert("Начинается процесс оплаты...")
 
-			const response = await fetch("/api/orders", {
+			const response = await fetch(`${API_URL}/api/orders`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
