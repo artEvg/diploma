@@ -3,7 +3,10 @@
 		"frontend": {
 			"root": "frontend",
 			"routePrefix": "/",
-			"framework": "create-react-app"
+			"framework": "create-react-app",
+			"env": {
+				"CI": "false"
+			}
 		}
 	}
 }
