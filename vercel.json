@@ -3,12 +3,21 @@
 		"frontend": {
 			"root": "frontend",
 			"routePrefix": "/",
-			"framework": "create-react-app"
+			"framework": "create-react-app",
+			"env": {
+				"CI": "false"
+			}
 		},
 		"backend": {
 			"root": "backend",
 			"routePrefix": "/_/backend",
 			"framework": "nodejs"
 		}
-	}
+	},
+	"rewrites": [
+		{
+			"source": "/(/.*)",
+			"destination": "/index.html"
+		}
+	]
 }
