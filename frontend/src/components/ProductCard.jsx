@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import ProductCard from "../components/ProductCard"
 import "../styles/product.css"
 
@@ -6,46 +6,50 @@ const Shop = () => {
 	const [products, setProducts] = useState([])
 	const [loading, setLoading] = useState(true)
 	const [search, setSearch] = useState("")
-	const [currentPage, setCurrentPage] = useState(1)
 
 	const API_URL = process.env.REACT_APP_BACKEND_BASEURL
-	const productsPerPage = 6
 
 	useEffect(() => {
+		const controller = new AbortController()
+
 		const fetchProducts = async () => {
 			try {
-				const res = await fetch(`${API_URL}/api/products`)
+				const res = await fetch(`${API_URL}/api/products`, {
+					signal: controller.signal,
+				})
+
+				if (!res.ok) {
+					throw new Error(`HTTP error! status: ${res.status}`)
+				}
+
 				const data = await res.json()
-				setProducts(data)
+				setProducts(Array.isArray(data) ? data : [])
 			} catch (error) {
-				console.error(error)
+				if (error.name !== "AbortError") {
+					console.error("Ошибка при загрузке товаров:", error)
+				}
 			} finally {
 				setLoading(false)
 			}
 		}
 
-		fetchProducts()
+		if (API_URL) {
+			fetchProducts()
+		} else {
+			console.error("REACT_APP_BACKEND_BASEURL не задан")
+			setLoading(false)
+		}
+
+		return () => controller.abort()
 	}, [API_URL])
 
-	const filteredProducts = products.filter(p =>
-		p.name.toLowerCase().includes(search.toLowerCase()),
-	)
+	const filteredProducts = useMemo(() => {
+		const query = search.trim().toLowerCase()
 
-	const totalPages = Math.ceil(filteredProducts.length / productsPerPage)
-	const indexOfLastProduct = currentPage * productsPerPage
-	const indexOfFirstProduct = indexOfLastProduct - productsPerPage
-	const currentProducts = filteredProducts.slice(
-		indexOfFirstProduct,
-		indexOfLastProduct,
-	)
-
-	const handlePageChange = page => {
-		setCurrentPage(page)
-	}
-
-	useEffect(() => {
-		setCurrentPage(1)
-	}, [search])
+		return products.filter(product =>
+			(product?.name || "").toLowerCase().includes(query),
+		)
+	}, [products, search])
 
 	return (
 		<div className='shop-container'>
@@ -62,41 +66,18 @@ const Shop = () => {
 			{loading ? (
 				<div>Загрузка...</div>
 			) : (
-				<>
-					<div className='product-grid'>
-						{currentProducts.map(product => (
+				<div className='product-grid'>
+					{filteredProducts.length > 0 ? (
+						filteredProducts.map(product => (
 							<ProductCard
 								key={product._id}
 								product={product}
 							/>
-						))}
-					</div>
-
-					{totalPages > 1 && (
-						<div className='pagination'>
-							<button
-								onClick={() => handlePageChange(currentPage - 1)}
-								disabled={currentPage === 1}>
-								Назад
-							</button>
-
-							{Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
-								<button
-									key={page}
-									onClick={() => handlePageChange(page)}
-									className={currentPage === page ? "active" : ""}>
-									{page}
-								</button>
-							))}
-
-							<button
-								onClick={() => handlePageChange(currentPage + 1)}
-								disabled={currentPage === totalPages}>
-								Вперёд
-							</button>
-						</div>
+						))
+					) : (
+						<div>Товары не найдены</div>
 					)}
-				</>
+				</div>
 			)}
 		</div>
 	)
