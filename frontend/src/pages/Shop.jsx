@@ -9,7 +9,7 @@ const Shop = () => {
 	const [currentPage, setCurrentPage] = useState(1)
 
 	const API_URL = process.env.REACT_APP_BACKEND_BASEURL
-	const itemsPerPage = 6
+	const itemsPerPage = 8
 
 	useEffect(() => {
 		const controller = new AbortController()
